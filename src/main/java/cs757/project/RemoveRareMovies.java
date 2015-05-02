@@ -37,11 +37,8 @@ public class RemoveRareMovies {
 		ArrayList<Integer> ordered = new ArrayList<Integer>(map.values());
 		Collections.sort(ordered);
 		
-//		System.out.println("size="+ordered.size());
 		int percentile = 35;
 		int cutoff = ordered.get((ordered.size()*percentile)/100);
-//		System.out.println("cutoff="+cutoff);
-		
 		double ratingsOnRareMovies = 0.0;
 		TreeSet<Integer> reducedMovies = new TreeSet<Integer>();
 		TreeSet<Integer> reducedUsers = new TreeSet<Integer>();
