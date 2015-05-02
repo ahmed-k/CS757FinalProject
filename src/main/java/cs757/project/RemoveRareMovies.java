@@ -96,25 +96,21 @@ public class RemoveRareMovies {
 		File movieMapping = new File("movie_id_map.txt");
 		if (!movieMapping .exists()) 
 			movieMapping .createNewFile();
-		fw = new FileWriter(movieMapping .getAbsoluteFile());
+		fw = new FileWriter(movieMapping.getAbsoluteFile());
 		bw = new BufferedWriter(fw);
-		for ( Integer oldId : movieIdMap.keySet() ){
-			bw.write(oldId+"::"+movieIdMap.get(oldId));
-	 		bw.newLine();
-		}
-		scanner.close();
+		for ( Integer oldId : movieIdMap.keySet() )
+			bw.write(oldId+"::"+movieIdMap.get(oldId)+"\n");
+	 	scanner.close();
 		bw.close();
 		
 		File userMapping = new File("user_id_map.txt");
 		if (!userMapping .exists()) 
 			userMapping .createNewFile();
-		fw = new FileWriter(userMapping .getAbsoluteFile());
+		fw = new FileWriter(userMapping.getAbsoluteFile());
 		bw = new BufferedWriter(fw);
-		for ( Integer oldId : userIdMap.keySet() ){
-			bw.write(oldId+"::"+userIdMap.get(oldId));
-	 		bw.newLine();
-		}
-		scanner.close();
+		for ( Integer oldId : userIdMap.keySet() )
+			bw.write(oldId+"::"+userIdMap.get(oldId)+"\n");
+	 	scanner.close();
 		bw.close();
 		
     }
