@@ -31,6 +31,10 @@ public class JobFactory {
 
     private static Job createPreprocessingJob(String[] args) throws IOException {
         Configuration conf = new Configuration();
+//		conf.set("mapred.textoutputformat.separator", "::");
+//        conf.set("mapreduce.input.fileinputformat.split.maxsize", "256000");
+//        conf.set("mapreduce.job.reduces", "80");
+        
         Job retv = new Job(conf, "Preprocessing Input for Distance Metric Calculation");
         retv.setJarByClass(ProjectDriver.class);
         retv.setInputFormatClass(TextInputFormat.class);
