@@ -1,6 +1,8 @@
 /target/
 /inputs.zip
 /inputs/
+/.idea
+
 
 .DS_Store
 .classpath
