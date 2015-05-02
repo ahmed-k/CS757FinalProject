@@ -4,12 +4,15 @@ package cs757.project.preprocessor;
  * Created by alabdullahwi on 5/2/2015.
  */
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-
-import java.io.IOException;
 
 /**
  * this class takes the output produced by the non-MapReduce preprocessing program RemoveRareMovies
@@ -30,33 +33,27 @@ public class Munger {
         public void map(Object _key, Text _vals, Context context) throws IOException, InterruptedException {
         	String[] vals = _vals.toString().split("::");
         	Integer userID = Integer.valueOf(vals[0]);
-        	String _rating = vals[2];
-            String movieID = vals[1];
+        	String movieID = vals[1];
+        	String rating = vals[2];
             //normalize rating here
-            int rating = new Double((Double.valueOf(_rating) * 2)).intValue();
             keyOut.set(userID);
-            valOut.set(movieID + ":" + rating);
+            valOut.set(movieID + ":" + new Double((Double.valueOf(rating) * 2)).intValue());
             context.write(keyOut, valOut);
         }
     }
-
 
         public static class MungerReducer extends Reducer<IntWritable, Text, IntWritable, Text> {
 
             static String content = "";
             static Text valOut = new Text();
+            
             public void reduce(IntWritable userID, Iterable<Text> movieRatings, Context context) throws IOException, InterruptedException {
-                for (Text movieRating : movieRatings) {
-                    content += movieRating.toString() + ",";
-                }
-                //remove last comma
-                content = content.substring(0, content.length());
-                valOut.set(content);
-                content = "";
+            	List<String> ratings = new ArrayList<String>();
+                for (Text mr : movieRatings)
+                	ratings.add(mr.toString());
+                valOut.set(StringUtils.join(ratings, ","));
                 context.write(userID, valOut);
-                }
             }
-
-
         }
 
+}
