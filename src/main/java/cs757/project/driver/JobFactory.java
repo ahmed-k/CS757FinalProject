@@ -1,16 +1,18 @@
 package cs757.project.driver;
 
-import cs757.project.preprocessor.Munger;
+import java.io.IOException;
+
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.io.IOException;
+import cs757.project.preprocessor.Munger;
 
 /**
  * Created by alabdullahwi on 5/2/2015.
@@ -31,13 +33,18 @@ public class JobFactory {
         Configuration conf = new Configuration();
         Job retv = new Job(conf, "Preprocessing Input for Distance Metric Calculation");
         retv.setJarByClass(ProjectDriver.class);
-        retv.setInputFormatClass(KeyValueTextInputFormat.class);
+        retv.setInputFormatClass(TextInputFormat.class);
         retv.setMapperClass(Munger.MungerMapper.class);
         retv.setReducerClass(Munger.MungerReducer.class);
         retv.setOutputKeyClass(IntWritable.class);
         retv.setOutputValueClass(Text.class);
         FileInputFormat.addInputPath(retv, new Path(args[0]));
-        FileOutputFormat.setOutputPath(retv, new Path(args[1]));
+        
+        Path outputDir = new Path(args[1]);
+        FileOutputFormat.setOutputPath(retv, outputDir);
+        FileSystem hdfs = FileSystem.get(conf);
+		if (hdfs.exists(outputDir))
+			hdfs.delete(outputDir, true);
 
         return retv;
     }

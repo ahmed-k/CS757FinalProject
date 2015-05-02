@@ -22,20 +22,21 @@ import java.io.IOException;
  */
 public class Munger {
 
-    public static class MungerMapper extends Mapper<Text, Text , IntWritable, Text> {
+    public static class MungerMapper extends Mapper<Object, Text , IntWritable, Text> {
 
-        static IntWritable keyOut;
-        static Text valOut;
+        static IntWritable keyOut = new IntWritable();
+        static Text valOut = new Text();
 
-        public void map(Text _key, Text _vals, Context context) throws IOException, InterruptedException {
-            String[] vals = _vals.toString().split("::");
-            Integer userID = Integer.valueOf(vals[0]);
-            String _rating = vals[1];
-            String movieID = _key.toString();
+        public void map(Object _key, Text _vals, Context context) throws IOException, InterruptedException {
+        	String[] vals = _vals.toString().split("::");
+        	Integer userID = Integer.valueOf(vals[0]);
+        	String _rating = vals[2];
+            String movieID = vals[1];
             //normalize rating here
             int rating = new Double((Double.valueOf(_rating) * 2)).intValue();
             keyOut.set(userID);
             valOut.set(movieID + ":" + rating);
+            context.write(keyOut, valOut);
         }
     }
 
