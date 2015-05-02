@@ -1,1 +1,11 @@
-target/
+/target/
+/inputs.zip
+/inputs/
+
+.DS_Store
+.classpath
+.DS_Store
+.classpath
+.project
+.settings/
+/bin/
