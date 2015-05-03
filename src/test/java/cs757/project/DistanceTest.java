@@ -4,42 +4,30 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
 
 public class DistanceTest {
 	
 	
-	private String 	A = "4,,,5,1,,",
-					B = "5,5,4,,,,",
-					C = ",,,2,4,5,";
-	
-	private String[] vectorA, vectorB, vectorC;
-	
-	@Before
-	public void init(){
-		vectorA = A.split(",", -1);
-		vectorB = B.split(",", -1);
-		vectorC = C.split(",", -1);
-	}
+	private String 	A = "1:4,4:5,5:1,",
+					B = "1:5,2:5,3:4",
+					C = "4:2,5:4,6:5,";
 	
 	@Test
 	public void jaccardBag(){
-		System.out.println(Distance.jaccardBag(vectorA, vectorB));
-		System.out.println(Distance.jaccardBag(vectorA, vectorC));
-		System.out.println(Distance.jaccardBag(vectorB, vectorC));
+		Assert.assertEquals(0.16, Distance.jaccardBag(A, B), 0.01);
+		Assert.assertEquals(0.14, Distance.jaccardBag(A, C), 0.01);
+		Assert.assertEquals(0.0, Distance.jaccardBag(B, C), 0.0);
 	}
 	
-//	@Test
-//	public void converVectorToMap(){
-//		Map<Integer, String> map = Distance.convertToMap(vectorA);
-//		Assert.assertEquals("4", map.get(1));
-//		Assert.assertEquals(null, map.get(2));
-//		Assert.assertEquals(null, map.get(3));
-//		Assert.assertEquals("5", map.get(4));
-//		Assert.assertEquals("1", map.get(5));
-//	}
+	@Test
+	public void converVectorToMap(){
+		Map<String, Integer> map = Distance.convertToMap(A);
+		Assert.assertEquals(new Integer(4), map.get("1"));
+		Assert.assertEquals(new Integer(5), map.get("4"));
+		Assert.assertEquals(new Integer(1), map.get("5"));
+	}
 	
     
 

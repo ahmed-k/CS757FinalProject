@@ -1,36 +1,54 @@
 package cs757.project;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Distance {
 	
-	public static double jaccardBag(String[] v1, String[] v2){
+	/**
+	 * @param line1 example "121:6,245:8,244:4,97:2"
+	 * @param line2
+	 * @return jaccard bag distance
+	 */
+	public static double jaccardBag(String line1, String line2){
 		
 		int intersection = 0;
 		int union = 0;
 		
-		for ( int i = 0; i < v1.length; i++ ){
-			String r1 = v1[i];
-			String r2 = v2[i];
-			if ( !r1.isEmpty() && !r2.isEmpty() )
-				intersection += Math.min(Integer.valueOf(r1), Integer.valueOf(r2));
-			if ( !r1.isEmpty() )
-				union += Integer.valueOf(r1);
-			if ( !r2.isEmpty() )
-				union += Integer.valueOf(r2);
+		Map<String, Integer> map1 = convertToMap(line1),
+							map2 = convertToMap(line2);
+		
+		Set<String> keys = new HashSet<String>(map1.keySet());
+		keys.addAll(map2.keySet());
+		for (String key : keys ){
+			Integer v1 = map1.get(key),
+					v2 = map2.get(key);
+			if ( v1 != null && v2 != null )
+				intersection += Math.min(v1, v2);
+			if ( v1 != null )
+				union += v1;
+			if ( v2 != null )
+				union += v2;
 		}
+		
 		return intersection/(double)union;
 	}
 	
-	
-//	public static Map<Integer, String> convertToMap(String[] vector){
-//		Map<Integer, String> map = new HashMap<Integer, String>((int)(vector.length/.74));
-//		for ( int i = 0; i < vector.length; i++ )
-//		    if ( !vector[i].isEmpty() )   
-//		         map.put( i+1 , vector[i] );  
-//		return map;
-//	}
+	/**
+	 * @param line example "121:6,245:8,244:4,97:2"
+	 * @return
+	 */
+	public static Map<String, Integer> convertToMap(String line){
+		String tokens[] = line.split(",");
+		Map<String, Integer> map = new HashMap<String, Integer>((int)(tokens.length/.74));
+		for ( String t : tokens ){
+			String[] keyValue = t.split(":");
+			map.put(keyValue[0], Integer.valueOf(keyValue[1]));
+		}
+		return map;
+	}
 	
 
 }
