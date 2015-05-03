@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class User implements WritableComparable<User> {
 
-    private String userId;
+    private int userId;
     private Map<String,Integer> ratings;
 
     public String toString() {
@@ -24,17 +24,31 @@ public class User implements WritableComparable<User> {
         return retv;
     }
 
+    public boolean equals(Object o) {
+        if (o == null || o instanceof User == false) {
+            return false;
+        }
+        User other = (User) o ;
+        return other.getUserId() == this.userId;
+
+    }
+
+    public int hashCode() {
+        return ratings.hashCode() % userId * 37 ;
+
+    }
+
     public User() {}
-    public User(String id, Map<String,Integer> ratingsVector) {
+    public User(int id, Map<String,Integer> ratingsVector) {
         this.userId = id;
         this.ratings = ratingsVector;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -48,12 +62,20 @@ public class User implements WritableComparable<User> {
 
     @Override
     public int compareTo(User o) {
-        return 0;
+        if (userId > o.getUserId()) {
+            return 1;
+        }
+        else if (userId == o.getUserId()) {
+            return 0;
+        }
+        else {
+            return -1;
+        }
     }
 
     @Override
     public void write(DataOutput dataOutput) throws IOException {
-        dataOutput.writeUTF(userId);
+        dataOutput.writeInt(userId);
         int size = 0;
         if (ratings != null) {
             size = ratings.size();
@@ -69,7 +91,7 @@ public class User implements WritableComparable<User> {
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
-        userId = dataInput.readUTF();
+        userId = dataInput.readInt();
         int size = dataInput.readInt();
         if (size != 0) {
             ratings = new HashMap<String,Integer>((int) (size/.745));

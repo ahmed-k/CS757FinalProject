@@ -21,15 +21,6 @@ public class Canopy implements WritableComparable<Canopy> {
         members = new ArrayList<String>();
     }
 
-    public String printCentroid() {
-        if (centroid == null) {
-            return "null";
-        }
-        else{
-            return centroid.toString();
-        }
-
-    }
     public User getCentroid() { return centroid; }
     public void setCentroid(User user) { this.centroid = user; }
     public List<String> getMembers() { return members; }
