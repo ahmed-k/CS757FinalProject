@@ -16,6 +16,10 @@ public class Canopy implements WritableComparable<Canopy> {
     private User centroid;
     private List<User> members;
 
+    public Canopy() {
+        centroid = new User();
+        members = new ArrayList<User>();
+    }
 
     public String getCentroidId() { return centroid.getUserId(); }
     public User getCentroid() { return centroid; }
