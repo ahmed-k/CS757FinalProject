@@ -51,13 +51,11 @@ public class Step1 {
 			while ( !map.isEmpty() ){
 		        
 				//pick random point out of set, u'
-		        List<String> users = new ArrayList<String>(map.keySet());
-		        
+		        List<String> users = new ArrayList<String>(map.keySet());		        
 		        int index = random.nextInt(map.size());
 		        String userPrime = users.get(index);
-//		        System.out.println(userPrime);
 		        
-		        //put u' into canopy and 
+		        //put u' into canopy and remove it from set
 		        List<String> canopy = new ArrayList<String>();
 		        canopy.add(map.get(userPrime));
 		        Map<String, Integer> userPrimeVector = Distance.convertToMap(map.get(userPrime));
@@ -66,21 +64,21 @@ public class Step1 {
 		        /*
 		        for each u in set
 		           if u veryClose to u'
-		               veryCloseCollection.put(u)
+		               veryClose.add(u)
 		           if u closeEnough to u'
-		               canopySet.put(uVector)
+		               canopySet.add(uVector)
 		        */
 		        List<String> veryCloseUsers = new ArrayList<String>();
 		        for ( String user : map.keySet() ){
 		        	double d = Distance.jaccardBag(userPrimeVector, Distance.convertToMap(map.get(user)));
-		        	if ( d <= 0.0125 )
+		        	if ( d <= 0.01 )
 		        		veryCloseUsers.add(user);
-		        	else if ( d <= 0.025 )
+		        	if ( d <= 0.025 )
 		        		canopy.add(map.get(user));
 		        }
 		        
-		        System.out.println("veryCloseUsers ="+veryCloseUsers.size()+", canopy size = "+canopy.size());
-		        //centroid = calcCentroid( canopySet )
+		        System.out.println("veryCloseUsers="+veryCloseUsers.size()+", canopy size="+canopy.size());
+		        //centroid = calcCentroid( canopy )
 		        //emit ( "centroid",centroid )
 		        //set.remove( veryCloseSet )
 		        for ( String key : veryCloseUsers )
