@@ -55,7 +55,7 @@ public class Distance {
 			Integer v1 = map1.get(key),
 					v2 = map2.get(key);
 			if ( v1 != null && v2 != null ){
-				diffSqr = (double)((v1 - v2)^2);
+				diffSqr = Math.pow(v1 - v2, 2);
 				if ( weights != null ){
 					weight = weights.get(key);
 					if ( weight != null )
@@ -67,6 +67,43 @@ public class Distance {
 		return sum == 0 ? 999999 : Math.sqrt(sum);
 	}
 	
+	public static double cosine(Map<String,Integer> map1, Map<String,Integer> map2){
+		
+		Integer sum = 0;
+		int count = 0;
+		for ( String key : map1.keySet() ){
+			sum += map1.get(key);
+			count++;
+		}
+		
+		double xMean = sum/(double)count;
+		sum = 0;
+		count = 0;
+		for ( String key : map2.keySet() ){
+			sum += map2.get(key);
+			count++;
+		}
+		double yMean = sum/(double)count;
+		
+		Set<String> keys = new HashSet<String>(map1.keySet());
+		keys.addAll(map2.keySet());
+		double sumXY = 0.0,
+				xSqrSum = 0.0,
+				ySqrSum = 0.0;
+		
+		for ( String key : keys ){
+			Integer x = map1.get(key),
+					y = map2.get(key);
+			if ( x != null && y != null )
+				sumXY += (x-xMean)*(y-yMean);
+			if ( x != null )
+				xSqrSum = Math.pow(x-xMean, 2);
+			if ( y != null )
+				ySqrSum = Math.pow(y-yMean, 2);
+		}
+		return sumXY/(Math.sqrt(xSqrSum)*Math.sqrt(ySqrSum));
+	}
+		
 	/**
 	 *  this converts a line like in the example below into a map of string->int
 	 * @param line example "121:6,245:8,244:4,97:2"
