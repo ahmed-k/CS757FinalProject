@@ -58,8 +58,6 @@ public class Step1WithReducer {
         private void emitCanopies(Context context) throws IOException, InterruptedException {
 
             //5000 is the number of users per map node
-            int count = 0;
-            int originalSize = userRatingsMap.size();
             int limit = 50;
 
             while ( !userRatingsMap.isEmpty() && limit > 0 ){
@@ -95,7 +93,6 @@ public class Step1WithReducer {
                     //emit to reducer
                     context.write(keyOut, _canopy);
                     _canopy.clear();
-                    count++;
                 } else {
                     limit--;
                 }
@@ -112,7 +109,7 @@ public class Step1WithReducer {
 
         public void reduce(Text key, Iterable<Canopy> canopies, Context context) throws IOException, InterruptedException {
             for (Canopy canopy : canopies) {
-                keyOut.set(canopy.getCentroid().toString());
+                keyOut.set(canopy.printCentroid());
                 valOut.set(canopy.printMembers());
                 context.write(keyOut,valOut);
             }
