@@ -10,7 +10,7 @@ public class Distance {
 	/**
 	 * @param line1 example "121:6,245:8,244:4,97:2"
 	 * @param line2 same structure as line1
-	 * @return jaccard bag distance
+	 * @return jaccard bag similarity
 	 */
 	public static double jaccardBag(String line1, String line2){
 		return jaccardBag(convertToMap(line1), convertToMap(line2));
@@ -39,6 +39,16 @@ public class Distance {
 	
 	private static Double weight;
 	private static double diffSqr;
+	
+	/**
+	 * Using weights will produce a different scale
+	 * ideally weights are used when comparing a centroid map1 to point map2
+	 * 
+	 * @param map1
+	 * @param map2
+	 * @param weights if weights are used, it must have at least the same keys as map1.
+	 * @return
+	 */
 	public static double euclidean(Map<String,Integer> map1, Map<String,Integer> map2, Map<String,Double> weights){
 		double sum = 0;
 		for (String key : map1.keySet() ){
