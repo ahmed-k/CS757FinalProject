@@ -92,7 +92,7 @@ public class Step1 {
 		        
 //		        System.out.println("remaining set = "+map.size());
 		    }
-			System.out.println("canopies found="+count+", canopized percentage="+canopized.size()/(double)originalSize);
+			System.out.println("map size="+originalSize+", canopies found="+count+", canopized percentage="+canopized.size()/(double)originalSize);
 			map.clear();
 		}
         
