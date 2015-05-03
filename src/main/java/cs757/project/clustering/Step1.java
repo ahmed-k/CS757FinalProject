@@ -1,4 +1,4 @@
-package cs757.project;
+package cs757.project.clustering;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public class Step1 {
 		        
 //		        System.out.println("remaining set = "+map.size());
 		    }
-			System.out.println("map size="+originalSize+", canopies found="+count+", canopized percentage="+canopized.size()/(double)originalSize);
+			System.out.println("map size=" + originalSize + ", canopies found=" + count + ", canopized percentage=" + canopized.size() / (double) originalSize);
 			map.clear();
 		}
         

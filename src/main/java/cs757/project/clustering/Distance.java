@@ -1,4 +1,4 @@
-package cs757.project;
+package cs757.project.clustering;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,7 +9,7 @@ public class Distance {
 	
 	/**
 	 * @param line1 example "121:6,245:8,244:4,97:2"
-	 * @param line2
+	 * @param line2 same structure as line1
 	 * @return jaccard bag distance
 	 */
 	public static double jaccardBag(String line1, String line2){
@@ -38,6 +38,7 @@ public class Distance {
 	}
 	
 	/**
+	 *  this converts a line like in the example below into a map of string->int
 	 * @param line example "121:6,245:8,244:4,97:2"
 	 * @return
 	 */
