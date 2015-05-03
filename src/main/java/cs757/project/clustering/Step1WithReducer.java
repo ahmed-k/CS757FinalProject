@@ -58,10 +58,8 @@ public class Step1WithReducer {
         private void emitCanopies(Context context) throws IOException, InterruptedException {
 
             //5000 is the number of users per map node
-            Set<Map<String,Integer>> canopized = new HashSet<Map<String,Integer>>((int)(5000/.745));
             int count = 0;
             int originalSize = userRatingsMap.size();
-//			System.out.println("map size="+map.size());
             int limit = 50;
 
             while ( !userRatingsMap.isEmpty() && limit > 0 ){
@@ -90,29 +88,19 @@ public class Step1WithReducer {
                     }
                 }
 
-//		        System.out.println("veryCloseUsers="+veryCloseUsers.size()+", canopy size="+canopy.size());
-                //centroid = calcCentroid( canopy )
-                //emit ( "centroid",centroid )
                 if ( veryCloseUsers.size() > 10 || _canopy.getMembers().size()  > 50 ){
                     for ( String key : veryCloseUsers )
                         userRatingsMap.remove(key);
                     limit = 50;
-
                     //emit to reducer
                     context.write(keyOut, _canopy);
-                    //canopized.addAll(canopy);
+                    _canopy.clear();
                     count++;
-//			        System.out.println(count);
-//			        System.out.println("total canopized="+canopized.size());
                 } else {
                     limit--;
                 }
-
-//		        System.out.println("remaining set = "+map.size());
             }
-            System.out.println("map size="+originalSize+", canopies found="+count+", canopized percentage="+canopized.size()/(double)originalSize);
             userRatingsMap.clear();
-            _canopy.clear();
         }
 
     }
