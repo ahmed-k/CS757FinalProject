@@ -25,21 +25,18 @@ public class Step1 {
 	
 	public static class Step1Mapper extends Mapper<Object, Text , Text, Text> {
 		
-		static Map<String, String> map;
+		static Map<String, Map<String,Integer>> map;
 		static Random random = new Random();
 		
         @Override
         protected void setup(Context context) throws IOException, InterruptedException{
-        	map = new HashMap<String,String>((int)(5000/.745));
+        	map = new HashMap<String,Map<String,Integer>>((int)(5000/.89), 0.9f);
         	super.cleanup(context);
         }
 		
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         	String[] tokens = value.toString().split("\\s");
-        	map.put(tokens[0], tokens[1]);
-//        	map.put(key.toString(), value.toString());
-//        	if ( map.size() == 5000 )
-//        		emitCanopies(context);
+        	map.put(tokens[0], Distance.convertToMap(tokens[1]));
         }
         
 		@Override
@@ -50,64 +47,52 @@ public class Step1 {
 		
 		private void emitCanopies(Context context) {
 			
-			Set<String> canopized = new HashSet<String>((int)(5000/.745));
+			Set<Map<String,Integer>> canopized = new HashSet<Map<String,Integer>>((int)(5000/.745));
 			int count = 0;
 			int originalSize = map.size();
-			System.out.println("map size="+map.size());
-			int limit = 15;
+//			System.out.println("map size="+map.size());
+			int limit = 50;
 			
 			while ( !map.isEmpty() && limit > 0 ){
 				
-				count++;
-		        
 				//pick random point out of set, u'
 		        List<String> users = new ArrayList<String>(map.keySet());		        
 		        int index = random.nextInt(map.size());
 		        String userPrime = users.get(index);
 		        
 		        //put u' into canopy and remove it from set
-		        List<String> canopy = new ArrayList<String>();
+		        List<Map<String,Integer>> canopy = new ArrayList<Map<String,Integer>>();
 		        canopy.add(map.get(userPrime));
-		        Map<String, Integer> userPrimeVector = Distance.convertToMap(map.get(userPrime));
+		        Map<String, Integer> userPrimeVector = map.get(userPrime);
 		        map.remove(userPrime);
 		        
-		        /*
-		        for each u in set
-		           if u veryClose to u'
-		               veryClose.add(u)
-		           if u closeEnough to u'
-		               canopySet.add(uVector)
-		        */
 		        List<String> veryCloseUsers = new ArrayList<String>();
 		        for ( String user : map.keySet() ){
-		        	double similarity = Distance.jaccardBag(userPrimeVector, Distance.convertToMap(map.get(user)));
+		        	double similarity = Distance.jaccardBag(userPrimeVector, map.get(user));
 		        	if ( similarity > 0.135 )
 		        		veryCloseUsers.add(user);
 		        	if ( similarity > 0.120 )
 		        		canopy.add(map.get(user));
 		        }
 		        
-		        System.out.println("veryCloseUsers="+veryCloseUsers.size()+", canopy size="+canopy.size());
+//		        System.out.println("veryCloseUsers="+veryCloseUsers.size()+", canopy size="+canopy.size());
 		        //centroid = calcCentroid( canopy )
 		        //emit ( "centroid",centroid )
-		        //set.remove( veryCloseSet )
-		        if ( veryCloseUsers.size() > 25 || canopy.size() > 100 ){
+		        if ( veryCloseUsers.size() > 10 || canopy.size() > 50 ){
 			        for ( String key : veryCloseUsers )
 			        	map.remove(key);
-			        limit = 15;
-			        
+			        limit = 50;
 			        canopized.addAll(canopy);
+			        count++;
+//			        System.out.println(count);
 //			        System.out.println("total canopized="+canopized.size());
 		        } else {
 		        	limit--;
-//		        	System.out.println(limit);
 		        }
-//		        System.out.println(count);
-//		        if ( canopized.size() > 0.5*originalSize )
-//		        	break;
+		        
 //		        System.out.println("remaining set = "+map.size());
 		    }
-			System.out.println("canopized percentage="+canopized.size()/(double)originalSize);
+			System.out.println("canopies found="+count+", canopized percentage="+canopized.size()/(double)originalSize);
 			map.clear();
 		}
         

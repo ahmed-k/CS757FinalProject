@@ -43,7 +43,7 @@ public class Distance {
 	 */
 	public static Map<String, Integer> convertToMap(String line){
 		String tokens[] = line.split(",");
-		Map<String, Integer> map = new HashMap<String, Integer>((int)(tokens.length/.74));
+		Map<String, Integer> map = new HashMap<String, Integer>((int)(tokens.length/.94), 0.95f);
 		for ( String t : tokens ){
 			String[] keyValue = t.split(":");
 			map.put(keyValue[0], Integer.valueOf(keyValue[1]));

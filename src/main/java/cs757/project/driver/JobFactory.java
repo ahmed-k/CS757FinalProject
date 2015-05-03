@@ -57,8 +57,7 @@ public class JobFactory {
     
 	private static Job createStep1Job(String[] args) throws IOException {
         Configuration conf = new Configuration();
-//        conf.setInt("mapreduce.input.fileinputformat.split.maxsize", 5000000);
-        conf.setInt("mapreduce.input.lineinputformat.linespermap", 5000);
+        conf.setInt("mapreduce.input.lineinputformat.linespermap", 1500);
         
         Job job = new Job(conf, "Step 1");
         job.setJarByClass(ProjectDriver.class);
