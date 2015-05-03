@@ -2,6 +2,7 @@ package cs757.project;
 
 import java.util.Map;
 
+import cs757.project.clustering.Distance;
 import junit.framework.Assert;
 
 import org.junit.Test;
