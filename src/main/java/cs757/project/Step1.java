@@ -23,7 +23,7 @@ import org.apache.hadoop.mapreduce.Reducer;
  */
 public class Step1 {
 	
-	public static class Step1Mapper extends Mapper<Text, Text , Text, Text> {
+	public static class Step1Mapper extends Mapper<Object, Text , Text, Text> {
 		
 		static Map<String, String> map;
 		static Random random = new Random();
@@ -34,10 +34,12 @@ public class Step1 {
         	super.cleanup(context);
         }
 		
-        public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
-        	map.put(key.toString(), value.toString());
-        	if ( map.size() == 5000 )
-        		emitCanopies(context);
+        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+        	String[] tokens = value.toString().split("\\s");
+        	map.put(tokens[0], tokens[1]);
+//        	map.put(key.toString(), value.toString());
+//        	if ( map.size() == 5000 )
+//        		emitCanopies(context);
         }
         
 		@Override
@@ -48,7 +50,15 @@ public class Step1 {
 		
 		private void emitCanopies(Context context) {
 			
-			while ( !map.isEmpty() ){
+			Set<String> canopized = new HashSet<String>((int)(5000/.745));
+			int count = 0;
+			int originalSize = map.size();
+			System.out.println("map size="+map.size());
+			int limit = 15;
+			
+			while ( !map.isEmpty() && limit > 0 ){
+				
+				count++;
 		        
 				//pick random point out of set, u'
 		        List<String> users = new ArrayList<String>(map.keySet());		        
@@ -70,10 +80,10 @@ public class Step1 {
 		        */
 		        List<String> veryCloseUsers = new ArrayList<String>();
 		        for ( String user : map.keySet() ){
-		        	double d = Distance.jaccardBag(userPrimeVector, Distance.convertToMap(map.get(user)));
-		        	if ( d <= 0.01 )
+		        	double similarity = Distance.jaccardBag(userPrimeVector, Distance.convertToMap(map.get(user)));
+		        	if ( similarity > 0.135 )
 		        		veryCloseUsers.add(user);
-		        	if ( d <= 0.025 )
+		        	if ( similarity > 0.120 )
 		        		canopy.add(map.get(user));
 		        }
 		        
@@ -81,13 +91,24 @@ public class Step1 {
 		        //centroid = calcCentroid( canopy )
 		        //emit ( "centroid",centroid )
 		        //set.remove( veryCloseSet )
-		        for ( String key : veryCloseUsers )
-		        	map.remove(key);
-		        
-		        System.out.println("remaining set = "+map.size());
+		        if ( veryCloseUsers.size() > 25 || canopy.size() > 100 ){
+			        for ( String key : veryCloseUsers )
+			        	map.remove(key);
+			        limit = 15;
+			        
+			        canopized.addAll(canopy);
+//			        System.out.println("total canopized="+canopized.size());
+		        } else {
+		        	limit--;
+//		        	System.out.println(limit);
+		        }
+//		        System.out.println(count);
+//		        if ( canopized.size() > 0.5*originalSize )
+//		        	break;
+//		        System.out.println("remaining set = "+map.size());
 		    }
-			
-        	map.clear();
+			System.out.println("canopized percentage="+canopized.size()/(double)originalSize);
+			map.clear();
 		}
         
     }

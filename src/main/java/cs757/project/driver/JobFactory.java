@@ -9,7 +9,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.NLineInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
@@ -57,11 +57,12 @@ public class JobFactory {
     
 	private static Job createStep1Job(String[] args) throws IOException {
         Configuration conf = new Configuration();
-        conf.setInt("mapreduce.input.fileinputformat.split.maxsize", 5000000);
+//        conf.setInt("mapreduce.input.fileinputformat.split.maxsize", 5000000);
+        conf.setInt("mapreduce.input.lineinputformat.linespermap", 5000);
         
         Job job = new Job(conf, "Step 1");
         job.setJarByClass(ProjectDriver.class);
-        job.setInputFormatClass(KeyValueTextInputFormat.class);
+        job.setInputFormatClass(NLineInputFormat.class);
         job.setMapperClass(Step1.Step1Mapper.class);
         job.setReducerClass(Step1.Step1Reducer.class);
         job.setOutputKeyClass(Text.class);
