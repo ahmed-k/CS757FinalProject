@@ -24,7 +24,7 @@ public class Step1WithReducer {
         //this map will hold key: userID, the value is a map with pairs denoting movieID->rating
         static Map<String, Map<String,Integer>> userRatingsMap;
         static Random random = new Random();
-        static Text keyOut = new Text("canopies");
+        static Text   keyOut = new Text("canopies");
         static Canopy _canopy = new Canopy();
 
         @Override
@@ -86,8 +86,7 @@ public class Step1WithReducer {
                         veryCloseUsers.add(currentUser);
                     //T1
                     if ( similarity > 0.120 ) {
-                        User _user = new User(currentUser, currentUserVector);
-                        _canopy.addUser(_user);
+                        _canopy.addUser(currentUser);
                     }
                 }
 
@@ -125,7 +124,7 @@ public class Step1WithReducer {
 
         public void reduce(Text key, Iterable<Canopy> canopies, Context context) throws IOException, InterruptedException {
             for (Canopy canopy : canopies) {
-                keyOut.set(canopy.getCentroidId());
+                keyOut.set(canopy.getCentroid().toString());
                 valOut.set(canopy.printMembers());
                 context.write(keyOut,valOut);
             }

@@ -54,11 +54,16 @@ public class User implements WritableComparable<User> {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeUTF(userId);
-        int size = ratings.size();
+        int size = 0;
+        if (ratings != null) {
+            size = ratings.size();
+        }
         dataOutput.writeInt(size);
-        for (Map.Entry<String,Integer> rating : ratings.entrySet()) {
-            dataOutput.writeUTF(rating.getKey());
-            dataOutput.writeInt(rating.getValue());
+        if ( ratings != null) {
+            for (Map.Entry<String, Integer> rating : ratings.entrySet()) {
+                dataOutput.writeUTF(rating.getKey());
+                dataOutput.writeInt(rating.getValue());
+            }
         }
     }
 
@@ -66,11 +71,17 @@ public class User implements WritableComparable<User> {
     public void readFields(DataInput dataInput) throws IOException {
         userId = dataInput.readUTF();
         int size = dataInput.readInt();
-        ratings = new HashMap<String,Integer>((int) (size/.745));
-        for (int i = 0 ; i < size ; i++ ) {
-            String key = dataInput.readUTF();
-            Integer value = dataInput.readInt();
-            ratings.put(key,value);
+        if (size != 0) {
+            ratings = new HashMap<String,Integer>((int) (size/.745));
+            for (int i = 0 ; i < size ; i++ ) {
+                String key = dataInput.readUTF();
+                Integer value = dataInput.readInt();
+                ratings.put(key,value);
+            }
+
+        }
+        else {
+            ratings = new HashMap<String,Integer>();
         }
     }
 }

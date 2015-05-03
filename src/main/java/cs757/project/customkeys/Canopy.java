@@ -14,22 +14,21 @@ import java.util.List;
 public class Canopy implements WritableComparable<Canopy> {
 
     private User centroid;
-    private List<User> members;
+    private List<String> members;
 
     public Canopy() {
         centroid = new User();
-        members = new ArrayList<User>();
+        members = new ArrayList<String>();
     }
 
-    public String getCentroidId() { return centroid.getUserId(); }
     public User getCentroid() { return centroid; }
     public void setCentroid(User user) { this.centroid = user; }
-    public List<User> getMembers() { return members; }
-    public void setMembers(List<User> members) { this.members = members; }
+    public List<String> getMembers() { return members; }
+    public void setMembers(List<String> members) { this.members = members; }
 
     public String printMembers() {
         String retv="";
-        for (User member: members) {
+        for (String member: members) {
             retv+= member.toString()+",";
         }
         //trailing comma chop
@@ -37,9 +36,9 @@ public class Canopy implements WritableComparable<Canopy> {
         return retv;
     }
 
-    public void addUser(User user) {
+    public void addUser(String user) {
         if (members == null) {
-            members=  new ArrayList<User>();
+            members=  new ArrayList<String>();
         }
         members.add(user);
     }
@@ -57,22 +56,30 @@ public class Canopy implements WritableComparable<Canopy> {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         centroid.write(dataOutput);
-        dataOutput.writeInt(members.size());
-        for (int i = 0 ; i< members.size(); i++) {
-            members.get(i).write(dataOutput);
+        int size = 0 ;
+        if (members != null) {
+            size = members.size();
+        }
+        dataOutput.writeInt(size);
+        for (int i = 0 ; i< size ; i++) {
+            dataOutput.writeUTF(members.get(i));
         }
     }
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         centroid = new User();
-        int size = dataInput.readInt();
         centroid.readFields(dataInput);
-        members = new ArrayList<User>((int)(size/.475));
-        for (int i = 0 ; i< size; i++) {
-            User _user = new User();
-            _user.readFields(dataInput);
-            members.add(_user);
+        int size = dataInput.readInt();
+        if (size != 0) {
+            members = new ArrayList<String>((int) (size / .475));
+            for (int i = 0; i < size; i++) {
+                String _user = dataInput.readUTF();
+                members.add(_user);
+            }
+        }
+        else {
+            members = new ArrayList<String>();
         }
     }
 }
