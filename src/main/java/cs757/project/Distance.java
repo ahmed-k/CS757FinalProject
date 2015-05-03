@@ -13,15 +13,17 @@ public class Distance {
 	 * @return jaccard bag distance
 	 */
 	public static double jaccardBag(String line1, String line2){
+		return jaccardBag(convertToMap(line1), convertToMap(line2));
+	}
+	
+	public static double jaccardBag(Map<String,Integer> map1, Map<String,Integer> map2){
 		
 		int intersection = 0;
 		int union = 0;
 		
-		Map<String, Integer> map1 = convertToMap(line1),
-							map2 = convertToMap(line2);
-		
 		Set<String> keys = new HashSet<String>(map1.keySet());
 		keys.addAll(map2.keySet());
+		
 		for (String key : keys ){
 			Integer v1 = map1.get(key),
 					v2 = map2.get(key);
@@ -32,7 +34,6 @@ public class Distance {
 			if ( v2 != null )
 				union += v2;
 		}
-		
 		return intersection/(double)union;
 	}
 	
