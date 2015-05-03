@@ -104,8 +104,8 @@ public class Step1WithReducer {
 
     public static class Step1Reducer  extends Reducer<Text, Canopy, Text, Text> {
 
-        static Text keyOut;
-        static Text valOut;
+        static Text keyOut = new Text();
+        static Text valOut = new Text();
 
         public void reduce(Text key, Iterable<Canopy> canopies, Context context) throws IOException, InterruptedException {
             for (Canopy canopy : canopies) {
