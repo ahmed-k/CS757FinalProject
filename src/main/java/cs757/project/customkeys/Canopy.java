@@ -42,7 +42,7 @@ public class Canopy implements WritableComparable<Canopy> {
 
     public void clear() {
         centroid = null;
-        members = null;
+        members.clear();
     }
 
     @Override
