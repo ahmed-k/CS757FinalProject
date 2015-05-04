@@ -13,6 +13,7 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.NLineInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -110,13 +111,14 @@ public class JobFactory {
 
     private static Job createStep1PostProcessJob(String [] args) throws Exception {
         Configuration conf = new Configuration();
-        DistributedCache.addCacheFile(new URI("/original_inputs/massaged.dat"), conf);
+        DistributedCache.addCacheFile(new URI("original_inputs/massaged.dat"), conf);
         conf.set("mapred.child.java.opts", "-Xmx512m");
         Job job = new Job(conf, "Step 1 User To User Vector Postprocess Job");
         job.setJarByClass(ProjectDriver.class);
-        job.setInputFormatClass(NLineInputFormat.class);
+        job.setInputFormatClass(KeyValueTextInputFormat.class);
         job.setMapperClass(Step1UserToVector.Step1UserToVectorMapper.class);
-        job.setReducerClass(Step1UserToVector.Step1UserToVectorReducer.class);
+        //job.setReducerClass(Step1UserToVector.Step1UserToVectorReducer.class);
+        job.setNumReduceTasks(0);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 
