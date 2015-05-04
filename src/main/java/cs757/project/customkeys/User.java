@@ -17,10 +17,12 @@ public class User implements WritableComparable<User> {
     private Map<String,Integer> ratings;
 
     public String toString() {
-        String retv="ID:"+userId+"RATINGS:";
+        String retv=userId+"[";
         for (Map.Entry<String,Integer> e : ratings.entrySet()) {
-            retv+= "<"+ e.getKey()+ "," + e.getValue()+">";
+            retv+= e.getKey()+ ":" + e.getValue()+",";
         }
+        retv = retv.substring(0, retv.length()-1);
+        retv += "]";
         return retv;
     }
 
