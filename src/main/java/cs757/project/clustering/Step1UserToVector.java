@@ -3,6 +3,7 @@ package cs757.project.clustering;
 import cs757.project.customkeys.Canopy;
 import cs757.project.customkeys.User;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -15,6 +16,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.*;
 
 /**
@@ -30,15 +32,15 @@ import java.util.*;
 public class Step1UserToVector {
 
     public static class Step1UserToVectorMapper extends Mapper<Object, Text , Text, Text> {
-        private Map<Integer, String> userDictionary = new TreeMap<Integer, String>();
+        private static Map<Integer, String> userDictionary = new TreeMap<Integer, String>();
         static Text valOut = new Text();
-        static Text keyOut = new Text();
 
         // Load the user dictionary into memory
         public void setup(Context  context) {
             try {
-                FileSystem fs = FileSystem.get(new Configuration());
-                Path path = new Path("/original_input/reduced_ratings.txt");
+                FileSystem fs = FileSystem.get(context.getConfiguration());
+                URI files[]= DistributedCache.getCacheFiles(context.getConfiguration());
+                Path path = new Path(files[0].toString());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(path)));
                 String line;
                 line = reader.readLine();

@@ -6,6 +6,7 @@ import cs757.project.clustering.Step1WithReducer;
 import cs757.project.customkeys.Canopy;
 import cs757.project.preprocessor.Munger;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -18,6 +19,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
 
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * Created by alabdullahwi on 5/2/2015.
@@ -26,7 +28,7 @@ public class JobFactory {
 
 
     //args[0] is input, args[1] is output dir, args[2] is jobType
-    public static Job createJob(String[] args) throws IOException {
+    public static Job createJob(String[] args) throws Exception {
         String jobType = args[2];
         if ("preprocess".equals(jobType)) {
             return createPreprocessingJob(args);
@@ -107,10 +109,11 @@ public class JobFactory {
 
     }
 
-    private static Job createStep1PostProcessJob(String [] args) throws IOException {
+    private static Job createStep1PostProcessJob(String [] args) throws Exception {
         Configuration conf = new Configuration();
 
         Job job = new Job(conf, "Step 1 User To User Vector Postprocess Job");
+        DistributedCache.addCacheFile(new URI("/original_inputs/massaged.dat"), conf);
         job.setJarByClass(ProjectDriver.class);
         job.setInputFormatClass(KeyValueTextInputFormat.class);
         job.setMapperClass(Step1UserToVector.Step1UserToVectorMapper.class);
