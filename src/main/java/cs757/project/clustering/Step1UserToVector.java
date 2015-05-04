@@ -57,7 +57,7 @@ public class Step1UserToVector {
                 String tokenVal = userDictionary.get(Integer.valueOf(token));
                 System.out.println("TOKEN IS :" + token);
                 System.out.println("USERDIC VAL FOR TOKEN IS  IS :" + tokenVal);
-                content += "[" +tokenVal+"],";
+                content += token+"[" +tokenVal+"],";
             }
             content = content.substring(0, content.length()-1);
             valOut.set(content);
