@@ -33,6 +33,7 @@ public class Step1UserToVector {
                 String line;
                 line = reader.readLine();
                 while (line != null) {
+                    System.out.println(line);
                     String[] _line = line.split("\t");
                     userDictionary.put(Integer.valueOf(_line[0]), _line[1]);
                     line = reader.readLine();
@@ -42,12 +43,17 @@ public class Step1UserToVector {
 
         //just a test for now to see what userDictionary actually contains
         public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+            System.out.println("placeholder");
+        }
 
-                for ( Map.Entry<Integer, String> e : userDictionary.entrySet())  {
-                    keyOut.set(e.getKey().toString());
-                    valOut.set(e.getValue());
-                    context.write(keyOut,valOut);
-                }
+        public void cleanup(Context context) throws IOException, InterruptedException{
+
+            for (Map.Entry<Integer, String> e : userDictionary.entrySet()) {
+                keyOut.set(e.getKey().toString());
+                valOut.set(e.getValue());
+                context.write(keyOut,valOut);
+            }
+
         }
 
 
