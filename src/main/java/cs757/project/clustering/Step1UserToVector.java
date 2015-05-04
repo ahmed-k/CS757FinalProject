@@ -25,10 +25,9 @@ public class Step1UserToVector {
         static Text valOut = new Text();
 
         // Load the user dictionary into memory
-        public void setup(Context  context) {
-            try {
+        public void setup(Context  context) throws IOException {
                 FileSystem fs = FileSystem.get(context.getConfiguration());
-                URI files[]= DistributedCache.getCacheFiles(context.getConfiguration());
+                URI files[] = DistributedCache.getCacheFiles(context.getConfiguration());
                 Path path = new Path(files[0].toString());
                 BufferedReader reader = new BufferedReader(new InputStreamReader(fs.open(path)));
                 String line;
@@ -38,10 +37,6 @@ public class Step1UserToVector {
                     userDictionary.put(Integer.valueOf(_line[0]), _line[1]);
                     line = reader.readLine();
                 }
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
         }//setup
 
 
@@ -71,7 +66,7 @@ public class Step1UserToVector {
             content = content.substring(0, content.length()-1);
             valOut.set(content);
             keyOut.set("AHMED"+key.toString());
-            context.write(keyOut,valOut);
+            context.write(keyOut, valOut);
             content="";
         }
 
