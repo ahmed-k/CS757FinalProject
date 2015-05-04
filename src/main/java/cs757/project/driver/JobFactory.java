@@ -113,7 +113,7 @@ public class JobFactory {
         Configuration conf = new Configuration();
 
         Job job = new Job(conf, "Step 1 User To User Vector Postprocess Job");
-        DistributedCache.addCacheFile(new URI("/original_inputs/massaged.dat"), conf);
+        DistributedCache.addCacheFile(new URI("original_inputs/massaged.dat"), conf);
         job.setJarByClass(ProjectDriver.class);
         job.setInputFormatClass(KeyValueTextInputFormat.class);
         job.setMapperClass(Step1UserToVector.Step1UserToVectorMapper.class);
