@@ -112,13 +112,13 @@ public class JobFactory {
     private static Job createStep1PostProcessJob(String [] args) throws Exception {
         Configuration conf = new Configuration();
         DistributedCache.addCacheFile(new URI("/user/amuhamm3/original_inputs/massaged.dat"), conf);
-        conf.set("mapreduce.input.fileinputformat.split.maxsize","64000");
-        conf.set("mapred.child.java.opts","-Xmx512m");
+        conf.set("mapreduce.input.fileinputformat.split.maxsize", "64000");
+        conf.set("mapred.child.java.opts", "-Xmx512m");
         Job job = new Job(conf, "Step 1 User To User Vector Postprocess Job");
         job.setJarByClass(ProjectDriver.class);
         job.setInputFormatClass(KeyValueTextInputFormat.class);
         job.setMapperClass(Step1UserToVector.Step1UserToVectorMapper.class);
-        job.setNumReduceTasks(0);
+        job.setReducerClass(Step1UserToVector.Step1UserToVectorReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(Text.class);
 

@@ -61,6 +61,7 @@ public class Step1UserToVector {
     public static class Step1UserToVectorReducer  extends Reducer<Text, Text, Text, Text> {
 
         static Text valOut = new Text();
+        static Text keyOut = new Text();
         static String content = "";
         public void reduce(Text key, Iterable<Text> userVectors, Context context) throws IOException, InterruptedException {
             for (Text userVector: userVectors) {
@@ -69,7 +70,8 @@ public class Step1UserToVector {
             //chop trailing comma
             content = content.substring(0, content.length()-1);
             valOut.set(content);
-            context.write(key,valOut);
+            keyOut.set("AHMED"+key.toString());
+            context.write(keyOut,valOut);
             content="";
         }
 
