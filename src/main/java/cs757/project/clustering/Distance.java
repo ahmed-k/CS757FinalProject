@@ -67,23 +67,23 @@ public class Distance {
 		return sum == 0 ? 999999 : Math.sqrt(sum);
 	}
 	
-	public static double cosine(Map<String,Integer> map1, Map<String,Integer> map2){
+	public static double cosine(Map<String, Double> map1, Map<String,Double> map2){
 		
-		Integer sum = 0;
+		Double sum = 0.0;
 		int count = 0;
 		for ( String key : map1.keySet() ){
 			sum += map1.get(key);
 			count++;
 		}
+		double xMean = sum/count;
 		
-		double xMean = sum/(double)count;
-		sum = 0;
+		sum = 0.0;
 		count = 0;
 		for ( String key : map2.keySet() ){
 			sum += map2.get(key);
 			count++;
 		}
-		double yMean = sum/(double)count;
+		double yMean = sum/count;
 		
 		Set<String> keys = new HashSet<String>(map1.keySet());
 		keys.addAll(map2.keySet());
@@ -92,14 +92,14 @@ public class Distance {
 				ySqrSum = 0.0;
 		
 		for ( String key : keys ){
-			Integer x = map1.get(key),
+			Double x = map1.get(key),
 					y = map2.get(key);
 			if ( x != null && y != null )
 				sumXY += (x-xMean)*(y-yMean);
 			if ( x != null )
-				xSqrSum = Math.pow(x-xMean, 2);
+				xSqrSum += Math.pow(x-xMean, 2);
 			if ( y != null )
-				ySqrSum = Math.pow(y-yMean, 2);
+				ySqrSum += Math.pow(y-yMean, 2);
 		}
 		return sumXY/(Math.sqrt(xSqrSum)*Math.sqrt(ySqrSum));
 	}

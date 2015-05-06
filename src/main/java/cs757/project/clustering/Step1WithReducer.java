@@ -13,11 +13,9 @@ import java.util.*;
 /**
  * @author aaronlee
  *
- *  5k users per map? 10M set has almost 70K users
- *  massaged data is almost 70MB, so about 5 MB per input 
- *
  */
 public class Step1WithReducer {
+	
     static final double T1 = 0.135;
     static final double T2 = 0.120;
 
@@ -59,8 +57,10 @@ public class Step1WithReducer {
 
         private void emitCanopies(Context context) throws IOException, InterruptedException {
 
-            //5000 is the number of users per map node
             int limit = 50;
+            double originalSize = userRatingsMap.size();
+            int vcMin = (int)(originalSize*.01);
+            int canopyMin = (int)(originalSize*.03);
 
             while ( !userRatingsMap.isEmpty() && limit > 0 ){
 
@@ -88,7 +88,7 @@ public class Step1WithReducer {
                     }
                 }
 
-                if ( veryCloseUsers.size() > 10 || _canopy.getMembers().size()  > 50 ){
+                if ( veryCloseUsers.size() > vcMin || _canopy.getMembers().size() > canopyMin ){
                     for ( String key : veryCloseUsers )
                         userRatingsMap.remove(key);
                     limit = 50;

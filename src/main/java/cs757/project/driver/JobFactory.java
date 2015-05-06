@@ -70,6 +70,7 @@ public class JobFactory {
         conf.setInt("mapreduce.input.lineinputformat.linespermap", 1500);
         
         Job job = new Job(conf, "Step 1");
+        job.setNumReduceTasks(1);
         job.setJarByClass(ProjectDriver.class);
         job.setInputFormatClass(NLineInputFormat.class);
         job.setMapperClass(Step1.Step1Mapper.class);

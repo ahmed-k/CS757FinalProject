@@ -1,5 +1,6 @@
 package cs757.project.customkeys;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.io.WritableComparable;
 
 import java.io.DataInput;
@@ -27,13 +28,16 @@ public class Canopy implements WritableComparable<Canopy> {
     public void setMembers(List<String> members) { this.members = members; }
 
     public String printMembers() {
-        String retv="";
-        for (String member: members) {
-            retv+= member.toString()+",";
-        }
-        //trailing comma chop
-        retv = retv.substring(0, retv.length()-1);
-        return retv;
+//        String retv="";
+//        for (String member: members) {
+//            retv+= member.toString()+",";
+//        }
+//        //trailing comma chop
+//        retv = retv.substring(0, retv.length()-1);
+//        return retv;
+        
+        //this may just work as well
+        return StringUtils.join(members.toArray(), ",");
     }
 
     public void addUser(String user) {
