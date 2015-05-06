@@ -1,20 +1,17 @@
 package cs757.project.clustering;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 
+import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
+
 
 /**
  * @author aaronlee
+ *
  *
  */
 public class Step1 {

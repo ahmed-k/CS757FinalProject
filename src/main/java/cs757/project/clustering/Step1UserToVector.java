@@ -5,7 +5,6 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,11 +14,19 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Created by ahmed alabdullah on 5/3/15.
+ * author @aaronlee
+ * author @ahmedalabdullah
+ *
+ * This class is a post-processing step for Step1WithReducer  , the Step1Reducer's output is a canopy-per-line, where each line consists of the following signature:
+ * [centroid : members]
+ * the centroid is expressed in its full vector form - userID[movie:rating, movie:rating...]
+ * but for memory constraints and to speed things up, the members are just expressed as userIDs [user1, user2, user3...]
+ *
+ * This class takes the input from the Step1WithReducer class, then outputs
  */
 public class Step1UserToVector {
 
-    public static class Step1UserToVectorMapper extends Mapper<Text, Text , Text, Text> {
+    public static class Step1UserToVectorMapper extends Mapper<Text, Text, Text, Text> {
         private static Map<Integer, String> userDictionary = new TreeMap<Integer, String>();
         static Text keyOut = new Text();
         static String content = "";
@@ -41,8 +48,7 @@ public class Step1UserToVector {
                     userDictionary.put(Integer.valueOf(_line[0]), _line[1]);
                     line = reader.readLine();
                 }
-            }
-            finally {
+            } finally {
                 reader.close();
             }
         }//setup
@@ -57,51 +63,18 @@ public class Step1UserToVector {
                 String tokenVal = userDictionary.get(Integer.valueOf(token));
                 System.out.println("TOKEN IS :" + token);
                 System.out.println("USERDIC VAL FOR TOKEN IS  IS :" + tokenVal);
-                content += token+"[" +tokenVal+"],";
+                content += token + "[" + tokenVal + "],";
             }
-            content = content.substring(0, content.length()-1);
+            content = content.substring(0, content.length() - 1);
             valOut.set(content);
             context.write(key, valOut);
-            content="";
+            content = "";
 
         }
 
     }
 
 
-/*
-        public void cleanup(Context context) throws IOException, InterruptedException{
+}
 
-            for (Map.Entry<Integer, String> e : userDictionary.entrySet()) {
-                keyOut.set(e.getKey().toString());
-                valOut.set(e.getValue());
-                context.write(keyOut,valOut);
-            }
-
-        }
-
-
-    }
-*/
-
-    public static class Step1UserToVectorReducer  extends Reducer<Text, Text, Text, Text> {
-
-        static Text valOut = new Text();
-        static Text keyOut = new Text();
-        static String content = "";
-
-             public void reduce(Text key, Iterable<Text> userVectors, Context context) throws IOException, InterruptedException {
-                 for (Text userVector: userVectors) {
-                    content+= userVector.toString() +",";
-                     }
-                 //chop trailing comma
-                         content = content.substring(0, content.length()-1);
-                 valOut.set(content);
-                 context.write(key,valOut);
-                 content="";
-                 }
-
-                     }//end reducer
-
-    }//end class
 
