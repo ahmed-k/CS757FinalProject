@@ -12,6 +12,7 @@ import org.junit.Test;
 import cs757.project.clustering.Centroid;
 import cs757.project.clustering.Distance;
 import cs757.project.clustering.Step1;
+import cs757.project.customkeys.User;
 
 
 public class Tests {
@@ -30,7 +31,7 @@ public class Tests {
 	
 	@Test
 	public void converVectorToMap(){
-		Map<String, Integer> map = Distance.convertToMap(A);
+		Map<String, Integer> map = User.convertToMap(A);
 		Assert.assertEquals(new Integer(4), map.get("1"));
 		Assert.assertEquals(new Integer(5), map.get("4"));
 		Assert.assertEquals(new Integer(1), map.get("5"));
@@ -40,9 +41,9 @@ public class Tests {
 	public void calcCentroid(){
 		
 		List<Map<String,Integer>> list = new ArrayList<Map<String,Integer>>(3);
-		list.add(Distance.convertToMap(A));
-		list.add(Distance.convertToMap(B));
-		list.add(Distance.convertToMap(C));
+		list.add(User.convertToMap(A));
+		list.add(User.convertToMap(B));
+		list.add(User.convertToMap(C));
 		
 		Map<String,Double>[] outputs = Step1.Step1Mapper.calcCentroid(list);
 		

@@ -87,7 +87,7 @@ public class Step1 {
 			        
 			        valueOut.set(Centroid.mapToString(centroid)+"::"+Centroid.mapToString(movieCounts));
 			        //System.out.println("users remaining="+map.size());
-			        context.write(valueOut, valueOut);
+			        context.write(keyOut, valueOut);
 			        numberOfCanopies++;
 			        //canopized.addAll(canopy);
 			        
@@ -150,19 +150,18 @@ public class Step1 {
 	
 	public static class Step1Reducer extends Reducer<Text, Text, Text, Text> {
 		
-		List<Integer> canopiesFound;
-		List<Centroid> centroids;
 		static Text keyOut = new Text("centroids");
 		static Text valueOut = new Text();
         
         @Override
         protected void setup(Context context) throws IOException, InterruptedException{
-        	canopiesFound = new ArrayList<Integer>();
-        	centroids = new ArrayList<Centroid>();
         	super.setup(context);
         }
         
 		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+			
+			List<Integer> canopiesFound = new ArrayList<Integer>();
+			List<Centroid> centroids = new ArrayList<Centroid>();
 			
 			for ( Text t : values ){
 				String v = t.toString();
@@ -174,13 +173,7 @@ public class Step1 {
 				}
 			}
 			
-	    }
-		
-		@Override
-        protected void cleanup(Context context) throws IOException, InterruptedException{
-        	System.out.println("clean up");
-        	
-        	Integer total = 0;
+			Integer total = 0;
 			for ( Integer i : canopiesFound )
 				total += i;
 			int avgCanopiesFound = total / canopiesFound.size();
@@ -224,8 +217,10 @@ public class Step1 {
 //					System.out.println(Distance.cosine(c1.centroid, c2.centroid));
 //				}
 //			}
-				
-        }
+			
+	    }
+		
+		
 		
 	}
 	
