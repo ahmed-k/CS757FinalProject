@@ -18,7 +18,7 @@ public class RemoveRareMovies {
     public static void main(String[] args) throws IOException{
         
     	ClassLoader classLoader = RemoveRareMovies.class.getClassLoader();
-		File file = new File(classLoader.getResource("100K/u.data").getFile());
+		File file = new File(classLoader.getResource("datasets100K/u.data").getFile());
 		
 		HashMap<String, Integer> map = new HashMap<String,Integer>();
 		double numOfRatings = 0;
