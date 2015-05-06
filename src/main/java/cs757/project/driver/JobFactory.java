@@ -3,8 +3,10 @@ package cs757.project.driver;
 import cs757.project.clustering.Step1;
 import cs757.project.clustering.Step1UserToVector;
 import cs757.project.clustering.Step1WithReducer;
+import cs757.project.clustering.Step2;
 import cs757.project.customkeys.Canopy;
 import cs757.project.preprocessor.Munger;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
@@ -38,6 +40,8 @@ public class JobFactory {
             return createStep1JobWithReducer(args);
         } else if ("step1vector".equals(jobType)) {
             return createStep1PostProcessJob(args);
+        } else if ("step2".equals(jobType)) {
+            return createStep2Job(args);
         }
         return null;
     }
@@ -129,8 +133,28 @@ public class JobFactory {
         clearOutputDir(conf, outputDir);
 
         return job;
+    }
+    
+    private static Job createStep2Job(String [] args) throws Exception {
+        Configuration conf = new Configuration();
+        DistributedCache.addCacheFile(new URI("step1output/*"), conf);
+        Job job = new Job(conf, "Step 2 Job");
+        job.setJarByClass(ProjectDriver.class);
+        job.setInputFormatClass(KeyValueTextInputFormat.class);
+        job.setMapperClass(Step2.Step2Mapper.class);
+        job.setReducerClass(Step2.Step2Reducer.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(Text.class);
+
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+        Path outputDir = new Path(args[1]);
+        FileOutputFormat.setOutputPath(job, outputDir);
+        clearOutputDir(conf, outputDir);
+
+        return job;
 
     }
+    
 	private static void clearOutputDir(Configuration conf, Path outputDir) throws IOException {
     	FileSystem hdfs = FileSystem.get(conf);
 		if (hdfs.exists(outputDir))

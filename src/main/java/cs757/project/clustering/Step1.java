@@ -12,6 +12,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 
+import cs757.project.customkeys.User;
+
 
 /**
  * @author aaronlee
@@ -34,7 +36,7 @@ public class Step1 {
 		
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         	String[] tokens = value.toString().split("\\s");
-        	map.put(tokens[0], Distance.convertToMap(tokens[1]));
+        	map.put(tokens[0], User.convertToMap(tokens[1]));
         }
         
 		@Override
@@ -158,7 +160,7 @@ public class Step1 {
         protected void setup(Context context) throws IOException, InterruptedException{
         	canopiesFound = new ArrayList<Integer>();
         	centroids = new ArrayList<Centroid>();
-        	super.cleanup(context);
+        	super.setup(context);
         }
         
 		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {

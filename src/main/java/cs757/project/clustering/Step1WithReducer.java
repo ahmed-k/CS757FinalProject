@@ -43,7 +43,7 @@ public class Step1WithReducer {
          */
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             String[] tokens = value.toString().split("\\s");
-            userRatingsMap.put(tokens[0], Distance.convertToMap(tokens[1]));
+            userRatingsMap.put(tokens[0], User.convertToMap(tokens[1]));
         }
 
         /**

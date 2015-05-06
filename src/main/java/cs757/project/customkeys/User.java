@@ -1,12 +1,13 @@
 package cs757.project.customkeys;
 
-import org.apache.hadoop.io.WritableComparable;
-
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+
+import org.apache.hadoop.io.WritableComparable;
 
 /**
  * Created by alabdullahwi on 5/3/2015.
@@ -108,4 +109,19 @@ public class User implements WritableComparable<User> {
             ratings = new HashMap<String,Integer>();
         }
     }
+    
+	/**
+	 *  this converts a line like in the example below into a map of string->int
+	 * @param line example "121:6,245:8,244:4,97:2"
+	 * @return
+	 */
+	public static Map<String, Integer> convertToMap(String line){
+		String tokens[] = line.split(",");
+		Map<String, Integer> map = new TreeMap<String, Integer>();//((int)(tokens.length/.94), 0.95f);
+		for ( String t : tokens ){
+			String[] keyValue = t.split(":");
+			map.put(keyValue[0], Integer.valueOf(keyValue[1]));
+		}
+		return map;
+	}
 }
