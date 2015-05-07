@@ -86,7 +86,7 @@ public class Step1 {
 			        Map<String,Double> movieCounts = centroidCounts[1];
 			        
 			        valueOut.set(Centroid.mapToString(centroid)+"::"+Centroid.mapToString(movieCounts));
-			        System.out.println("users remaining="+map.size());
+//			        System.out.println("users remaining="+map.size());
 			        context.write(keyOut, valueOut);
 			        numberOfCanopies++;
 			        //canopized.addAll(canopy);
@@ -184,6 +184,7 @@ public class Step1 {
 				
 				double max = -1.0;
 				Centroid candidate1 = null, candidate2 = null;
+				int indexForRemoval =  0;
 				
 				for ( int j = 0; j < centroids.size()-1; j++ ){
 					Centroid c1 = centroids.get(j);
@@ -192,16 +193,17 @@ public class Step1 {
 						
 						double similarity = Distance.cosine(c1.centroid, c2.centroid);
 						if ( similarity > max ){
+							indexForRemoval = k;
 							max = similarity;
 							candidate1 = c1;
 							candidate2 = c2;
 						}
 					}
 				}
-				//System.out.println("centroids remaining="+centroids.size());
+				System.out.println("centroids remaining="+centroids.size());
 				
 				candidate1.combine(candidate2);
-				centroids.remove(candidate2);
+				centroids.remove(indexForRemoval);
 			}
 			
 			valueOut.set("");

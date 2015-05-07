@@ -64,6 +64,8 @@ public class Step2 {
         	Map<String,Integer> userRatings = User.convertToMap(value.toString());
         	
         	List<Centroid> candidates = new ArrayList<Centroid>();
+        	Double maxSimilarity = -1.0 ;
+        	Centroid cluster = null;
         	for ( Centroid c : centroids ){
         		Double similarity = Distance.jaccardCentroid(c, userRatings);
         		if ( similarity > minSimilarity )
@@ -71,8 +73,7 @@ public class Step2 {
         	}
         	
         	System.out.println("candidates size="+candidates.size());
-        	Double maxSimilarity = -1.0 ;
-        	Centroid cluster = null;
+        	
         	for ( Centroid c : candidates ){
         		Double similarity = Distance.cosineCentroid(c.centroid, userRatings);
         		if ( similarity > maxSimilarity ){
