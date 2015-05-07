@@ -85,7 +85,8 @@ public class Step1 {
 			        Map<String,Double> centroid = centroidCounts[0];
 			        Map<String,Double> movieCounts = centroidCounts[1];
 			        
-			        valueOut.set(Centroid.mapToString(centroid)+"::"+Centroid.mapToString(movieCounts));
+//			        valueOut.set(Centroid.mapToString(centroid)+"::"+Centroid.mapToString(movieCounts));
+			        valueOut.set(Centroid.mapToString(centroid)+"::+");
 //			        System.out.println("users remaining="+map.size());
 			        context.write(keyOut, valueOut);
 			        numberOfCanopies++;
@@ -167,7 +168,7 @@ public class Step1 {
 				String v = t.toString();
 				if ( v.contains("::") ){	//is a centroid
 					String centroidWeights[] = v.split("::");
-					centroids.add(new Centroid(centroidWeights[0], centroidWeights[1]));
+					centroids.add(new Centroid(centroidWeights[0]));
 				} else {
 					canopiesFound.add(Integer.valueOf(v));
 				}
@@ -180,6 +181,9 @@ public class Step1 {
 			
 			System.out.println("avg="+avgCanopiesFound);
 			System.out.println("size="+centroids.size());
+			
+			Map<Centroid, Map<Centroid, Double>> alreadyCompared = new HashMap<Centroid, Map<Centroid, Double>>(); 
+			
 			while ( centroids.size() > avgCanopiesFound ){
 				
 				double max = -1.0;
@@ -189,11 +193,35 @@ public class Step1 {
 				for ( int j = 0; j < centroids.size()-1; j++ ){
 					Centroid c1 = centroids.get(j);
 					for ( int k = j + 1; k < centroids.size(); k++ ){
-						Centroid c2 = centroids.get(k);
 						
-						double similarity = Distance.cosine(c1.centroid, c2.centroid);
+						Centroid c2 = centroids.get(k);
+						Double similarity = null;
+						boolean calc = false;
+						
+						//begin optimization
+						Map<Centroid,Double> compositeKey = alreadyCompared.get(c1);
+						if ( compositeKey != null ){
+							similarity = compositeKey.get(c2);
+							if ( similarity == null )
+								calc = true;
+						} else 
+							calc = true;
+						
+						if ( calc ){
+							System.out.println("calculating "+j+", "+k);
+							similarity = Distance.cosine(c1.centroid, c2.centroid);
+							if ( compositeKey == null )
+								compositeKey = new HashMap<Centroid,Double>();
+							compositeKey.put(c2, similarity);
+							alreadyCompared.put(c1, compositeKey);
+						} 
+						//end optimization
+						
+						if ( similarity == null )
+							throw new RuntimeException("no similarity calculated");
+						
 						if ( similarity > max ){
-							indexForRemoval = k;
+							indexForRemoval = j; //c1 will be removed
 							max = similarity;
 							candidate1 = c1;
 							candidate2 = c2;
@@ -202,13 +230,16 @@ public class Step1 {
 				}
 				System.out.println("centroids remaining="+centroids.size());
 				
-				candidate1.combine(candidate2);
 				centroids.remove(indexForRemoval);
+				candidate2.combine(candidate1);
+				alreadyCompared.remove(candidate1);
+				
 			}
 			
 			valueOut.set("");
 			for ( Centroid c : centroids ){
-				keyOut.set(Centroid.mapToString(c.centroid)+"::"+Centroid.mapToString(c.weights));
+				keyOut.set(Centroid.mapToString(c.centroid));
+//				keyOut.set(Centroid.mapToString(c.centroid)+"::"+Centroid.mapToString(c.weights));
 				context.write(keyOut, valueOut);
 			}
 			

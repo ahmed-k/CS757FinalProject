@@ -10,28 +10,33 @@ import org.apache.commons.lang.StringUtils;
 
 public class Centroid {
 	
-	protected final Map<String,Double> centroid;
-	protected final Map<String,Double> weights;
+	private static int counter = 0;
 	
-	public Centroid(String centroid, String weights){
+	protected final Map<String,Double> centroid;
+//	protected final Map<String,Double> weights;
+	protected final int id;
+	
+//	public Centroid(String centroid, String weights){
+	public Centroid(String centroid){
 		this.centroid = convertToMap(centroid);
-		this.weights = convertToMap(weights);
+//		this.weights = convertToMap(weights);
+		id = ++counter;
 	}
 	
 	@Override
 	public int hashCode(){
-		return this.weights.hashCode();
+		return this.centroid.hashCode();
 	}
 	
 	@Override
 	public boolean equals(Object o){
 		Centroid that = (Centroid)o;
-		return mapToString(this.weights).equals(mapToString(that.weights));
+		return this.id == that.id;
 	}
 	
 	@Override
 	public String toString(){
-		return mapToString(centroid)+"\n"+mapToString(weights);
+		return mapToString(centroid);
 	}
 
 	public void combine(Centroid c) {
@@ -39,14 +44,15 @@ public class Centroid {
 			Double prevRating = this.centroid.get(movie);
 			if ( prevRating == null ){
 				this.centroid.put(movie, c.centroid.get(movie));
-				this.weights.put(movie, c.weights.get(movie));
+//				this.weights.put(movie, c.weights.get(movie));
 			} else {
-				Double prevCount1 = this.weights.get(movie);
-				Double prevCount2 = c.weights.get(movie);
-				Double totalCount = prevCount1 + prevCount2; 
-				Double newRating = (prevCount1/totalCount)*prevRating + (prevCount2/totalCount)*c.centroid.get(movie);
+//				Double prevCount1 = this.weights.get(movie);
+//				Double prevCount2 = c.weights.get(movie);
+//				Double totalCount = prevCount1 + prevCount2; 
+//				Double newRating = (prevCount1/totalCount)*prevRating + (prevCount2/totalCount)*c.centroid.get(movie);
+				Double newRating = (prevRating + c.centroid.get(movie)) / 2;
 				this.centroid.put(movie, newRating);
-				this.weights.put(movie, totalCount);
+//				this.weights.put(movie, totalCount);
 			}
 		}
 	}

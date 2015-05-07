@@ -45,8 +45,7 @@ public class Step2 {
                 reader = new BufferedReader(new InputStreamReader(fs.open(path)));
                 String line = reader.readLine();
                 while (line != null) {
-                    String[] centroidCounts = line.split("::");
-                    centroids.add(new Centroid(centroidCounts[0], centroidCounts[1]));
+                    centroids.add(new Centroid(line));
                     line = reader.readLine();
                 }
             } finally {

@@ -118,34 +118,42 @@ public class Distance {
 			Integer v2 = userRatings.get(key);
 			if ( v1 != null && v2 != null )
 				intersection += Math.min(v1, v2);
-			if ( v2 != null )
+			if ( v2 != null ){
 				union += v2;
-			if ( v1 != null )
-				union += v1;
+				if ( v1 != null )
+					union += v1;
+			}
 		}
 		return intersection/(double)union;		
 	}
 
-	public static Double cosineCentroid(Map<String, Double> centroid, Map<String, Integer> p) {
-		Double sumX = 0.0, sumY = 0.0;
-		int countX = 0, countY = 0;
+	public static Double cosineCentroid(Map<String, Double> map1, Map<String, Integer> map2) {
 		
-		for ( String key : p.keySet() ){
-			sumX += p.get(key);
-			countX++;
-			sumY += centroid.get(key);
-			countY++;
+		Double sum = 0.0;
+		int count = 0;
+		for ( String key : map1.keySet() ){
+			sum += map1.get(key);
+			count++;
 		}
-		double xMean = sumX/countX;
-		double yMean = sumX/countX;
+		double xMean = sum/count;
 		
+		sum = 0.0;
+		count = 0;
+		for ( String key : map2.keySet() ){
+			sum += map2.get(key);
+			count++;
+		}
+		double yMean = sum/count;
+		
+		Set<String> keys = new HashSet<String>(map1.keySet());
+		keys.addAll(map2.keySet());
 		double sumXY = 0.0,
 				xSqrSum = 0.0,
 				ySqrSum = 0.0;
 		
-		for ( String key : p.keySet() ){
-			Integer x = p.get(key);
-			Double y = centroid.get(key);
+		for ( String key : keys ){
+			Double x = map1.get(key),
+					y = map2.get(key).doubleValue();
 			if ( x != null && y != null )
 				sumXY += (x-xMean)*(y-yMean);
 			if ( x != null )
@@ -154,6 +162,7 @@ public class Distance {
 				ySqrSum += Math.pow(y-yMean, 2);
 		}
 		return sumXY/(Math.sqrt(xSqrSum)*Math.sqrt(ySqrSum));
+
 	}
 		
 	

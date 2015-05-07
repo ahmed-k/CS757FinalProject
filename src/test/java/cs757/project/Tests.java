@@ -78,10 +78,10 @@ public class Tests {
 	public void combineCentroid(){
 		String centroid = "1:4.5,4:3.5,5:2.5";	
 		String weights = "1:2.0,4:2.0,5:2.0";
-		Centroid c1 = new Centroid(centroid, weights);
-		Centroid c2 = new Centroid("2:1,3:3,5:5", "2:2,3:2,5:10");
-		c1.combine(c2);
-		System.out.println(c1);
+//		Centroid c1 = new Centroid(centroid, weights);
+//		Centroid c2 = new Centroid("2:1,3:3,5:5", "2:2,3:2,5:10");
+//		c1.combine(c2);
+//		System.out.println(c1);
 	}
 	
 }
