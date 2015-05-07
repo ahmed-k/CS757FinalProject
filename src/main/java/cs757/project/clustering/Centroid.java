@@ -10,17 +10,17 @@ import org.apache.commons.lang.StringUtils;
 
 public class Centroid {
 	
-	private static int counter = 0;
+//	private static int counter = 1;
 	
 	protected final Map<String,Double> centroid;
 //	protected final Map<String,Double> weights;
-	protected final int id;
+//	protected final int id;
 	
 //	public Centroid(String centroid, String weights){
 	public Centroid(String centroid){
 		this.centroid = convertToMap(centroid);
 //		this.weights = convertToMap(weights);
-		id = ++counter;
+//		id = ++counter;
 	}
 	
 	@Override
@@ -31,7 +31,8 @@ public class Centroid {
 	@Override
 	public boolean equals(Object o){
 		Centroid that = (Centroid)o;
-		return this.id == that.id;
+		return this.centroid.hashCode() == that.centroid.hashCode();
+//		return this.id == that.id;
 	}
 	
 	@Override

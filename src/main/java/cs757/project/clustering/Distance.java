@@ -152,8 +152,9 @@ public class Distance {
 				ySqrSum = 0.0;
 		
 		for ( String key : keys ){
-			Double x = map1.get(key),
-					y = map2.get(key).doubleValue();
+			Double x = map1.get(key);
+			Integer rating = map2.get(key);
+			Double y = rating == null ? null : rating.doubleValue();
 			if ( x != null && y != null )
 				sumXY += (x-xMean)*(y-yMean);
 			if ( x != null )

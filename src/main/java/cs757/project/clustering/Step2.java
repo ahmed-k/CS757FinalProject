@@ -56,7 +56,7 @@ public class Step2 {
             
             System.out.println("total centroids="+centroids.size());
         }
-		static double minSimilarity = 0.1;
+		static double minSimilarity = 0.25;
 		
 	    @Override
         public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
@@ -69,12 +69,15 @@ public class Step2 {
         		Double similarity = Distance.jaccardCentroid(c, userRatings);
         		if ( similarity > minSimilarity )
         			candidates.add(c);
+//        	System.out.println("similarity="+similarity);
         	}
         	
         	System.out.println("candidates size="+candidates.size());
         	
+//        	for ( Centroid c : centroids ){
         	for ( Centroid c : candidates ){
         		Double similarity = Distance.cosineCentroid(c.centroid, userRatings);
+        		System.out.println("similarity="+similarity);
         		if ( similarity > maxSimilarity ){
         			maxSimilarity = similarity;
         			cluster = c;
@@ -99,8 +102,13 @@ public class Step2 {
 		
 		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 			List<String> outputVal = new ArrayList<String>();
-			for ( Text t : values )
+			int count = 0;
+			for ( Text t : values ){
 				outputVal.add(t.toString());
+				count++;
+			}
+			System.out.println("count="+count);
+			
 			valueOut.set(StringUtils.join(outputVal.toArray(), ","));
 			context.write(key, valueOut);
 	    }

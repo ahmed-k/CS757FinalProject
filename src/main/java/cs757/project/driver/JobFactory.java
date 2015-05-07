@@ -138,7 +138,7 @@ public class JobFactory {
     
     private static Job createStep2Job(String [] args) throws Exception {
         Configuration conf = new Configuration();
-        DistributedCache.addCacheFile(new URI("step1output/*"), conf);
+        DistributedCache.addFileToClassPath(new Path(args[3]), conf);
         Job job = new Job(conf, "Step 2 Job");
         job.setJarByClass(ProjectDriver.class);
         job.setInputFormatClass(KeyValueTextInputFormat.class);

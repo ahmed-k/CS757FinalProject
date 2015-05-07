@@ -208,17 +208,16 @@ public class Step1 {
 							calc = true;
 						
 						if ( calc ){
-//							System.out.println("calculating "+j+", "+k);
+//							System.out.println("calculating "+c1.id+", "+c2.id);
 							similarity = Distance.cosine(c1.centroid, c2.centroid);
 							if ( compositeKey == null )
 								compositeKey = new HashMap<Centroid,Double>();
 							compositeKey.put(c2, similarity);
 							alreadyCompared.put(c1, compositeKey);
 						} 
+//						else
+//							System.out.println("found "+c1.id+", "+c2.id);
 						//end optimization
-						
-						if ( similarity == null )
-							throw new RuntimeException("no similarity calculated");
 						
 						if ( similarity > max ){
 							indexForRemoval = j; //c1 will be removed
@@ -232,6 +231,7 @@ public class Step1 {
 				
 				centroids.remove(indexForRemoval);
 				candidate2.combine(candidate1);
+//				System.out.println("removing "+candidate1.id);
 				alreadyCompared.remove(candidate1);
 				
 			}
