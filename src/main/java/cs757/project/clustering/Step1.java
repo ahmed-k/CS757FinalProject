@@ -208,7 +208,7 @@ public class Step1 {
 							calc = true;
 						
 						if ( calc ){
-							System.out.println("calculating "+j+", "+k);
+//							System.out.println("calculating "+j+", "+k);
 							similarity = Distance.cosine(c1.centroid, c2.centroid);
 							if ( compositeKey == null )
 								compositeKey = new HashMap<Centroid,Double>();
