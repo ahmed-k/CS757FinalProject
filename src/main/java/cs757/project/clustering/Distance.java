@@ -126,6 +126,36 @@ public class Distance {
 		}
 		return intersection/(double)union;		
 	}
+
+	public static Double cosineCentroid(Map<String, Double> centroid, Map<String, Integer> p) {
+		Double sumX = 0.0, sumY = 0.0;
+		int countX = 0, countY = 0;
+		
+		for ( String key : p.keySet() ){
+			sumX += p.get(key);
+			countX++;
+			sumY += centroid.get(key);
+			countY++;
+		}
+		double xMean = sumX/countX;
+		double yMean = sumX/countX;
+		
+		double sumXY = 0.0,
+				xSqrSum = 0.0,
+				ySqrSum = 0.0;
+		
+		for ( String key : p.keySet() ){
+			Integer x = p.get(key);
+			Double y = centroid.get(key);
+			if ( x != null && y != null )
+				sumXY += (x-xMean)*(y-yMean);
+			if ( x != null )
+				xSqrSum += Math.pow(x-xMean, 2);
+			if ( y != null )
+				ySqrSum += Math.pow(y-yMean, 2);
+		}
+		return sumXY/(Math.sqrt(xSqrSum)*Math.sqrt(ySqrSum));
+	}
 		
 	
 

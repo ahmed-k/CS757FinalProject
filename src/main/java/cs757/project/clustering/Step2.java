@@ -65,19 +65,18 @@ public class Step2 {
         	
         	List<Centroid> candidates = new ArrayList<Centroid>();
         	for ( Centroid c : centroids ){
-        		double similarity = Distance.jaccardCentroid(c, userRatings);
+        		Double similarity = Distance.jaccardCentroid(c, userRatings);
         		if ( similarity > minSimilarity )
         			candidates.add(c);
         	}
         	
         	System.out.println("candidates size="+candidates.size());
-        	Double min = 99999.9;
+        	Double maxSimilarity = -1.0 ;
         	Centroid cluster = null;
         	for ( Centroid c : candidates ){
-//        		Double d = Distance.euclidean(c.centroid, userRatings, c.weights);
-        		Double d = 0.0;
-        		if ( d < min ){
-        			min = d;
+        		Double similarity = Distance.cosineCentroid(c.centroid, userRatings);
+        		if ( similarity > maxSimilarity ){
+        			maxSimilarity = similarity;
         			cluster = c;
         		}
         	}

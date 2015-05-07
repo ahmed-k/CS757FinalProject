@@ -50,8 +50,8 @@ public class Step1 {
 			int numberOfCanopies = 0;
 			int originalSize = map.size();
 			int limit = 50;
-			int vcMin = (int)(originalSize*.01);
-	        int canopyMin = (int)(originalSize*.03);
+			int vcMin = (int)(originalSize*.02);
+	        int canopyMin = (int)(originalSize*.05);
 			
 			while ( !map.isEmpty() && limit > 0 ){
 				
@@ -75,7 +75,7 @@ public class Step1 {
 		        		canopy.add(map.get(user));
 		        }
 		        
-		        //System.out.println("veryCloseUsers="+veryCloseUsers.size()+", canopy size="+canopy.size());
+//		        System.out.println("veryCloseUsers="+veryCloseUsers.size()+", canopy size="+canopy.size());
 		        if ( veryCloseUsers.size() > vcMin || canopy.size() > canopyMin ){
 			        for ( String key : veryCloseUsers )
 			        	map.remove(key);
@@ -86,7 +86,7 @@ public class Step1 {
 			        Map<String,Double> movieCounts = centroidCounts[1];
 			        
 			        valueOut.set(Centroid.mapToString(centroid)+"::"+Centroid.mapToString(movieCounts));
-			        //System.out.println("users remaining="+map.size());
+			        System.out.println("users remaining="+map.size());
 			        context.write(keyOut, valueOut);
 			        numberOfCanopies++;
 			        //canopized.addAll(canopy);
@@ -97,7 +97,7 @@ public class Step1 {
 
 		    }
 			//System.out.println("map size=" + originalSize + ", canopies found=" + numberOfCanopies + ", canopized percentage=" + canopized.size() / (double) originalSize);
-			//System.out.println("map size=" + originalSize + ", canopies found=" + numberOfCanopies);
+			System.out.println("map size=" + originalSize + ", canopies found=" + numberOfCanopies);
 			//TODO emit number of canopies
 			valueOut.set(String.valueOf(numberOfCanopies));
 			context.write(keyOut, valueOut);
@@ -124,7 +124,7 @@ public class Step1 {
 			
 			List<String> removals = new ArrayList<String>();
 			for ( Entry<String,Double> e : counts.entrySet() )
-				if ( e.getValue() <= 2.0 )
+				if ( e.getValue() == 2.0 )
 					removals.add(e.getKey());
 			for ( String key : removals ){
 				counts.remove(key);
