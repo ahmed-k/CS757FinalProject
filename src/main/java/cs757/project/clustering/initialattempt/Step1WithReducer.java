@@ -1,5 +1,6 @@
-package cs757.project.clustering;
+package cs757.project.clustering.initialattempt;
 
+import cs757.project.clustering.Distance;
 import cs757.project.customkeys.Canopy;
 import cs757.project.customkeys.User;
 import org.apache.hadoop.io.Text;

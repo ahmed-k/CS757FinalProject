@@ -1,13 +1,6 @@
 package cs757.project.clustering;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import cs757.project.customkeys.User;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
@@ -16,13 +9,15 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import cs757.project.customkeys.User;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
-/**
- * @author aaronlee
- *
- */
 public class Step2 {
 	
 	public static class Step2Mapper extends Mapper<Text, Text , Text, Text> {

@@ -1,4 +1,4 @@
-package cs757.project.preprocessor;
+package cs757.project.postprocessor;
 
 public class UserAttr {
 	protected final int age, occupuation;

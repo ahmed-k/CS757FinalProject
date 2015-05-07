@@ -1,4 +1,4 @@
-package cs757.project.clustering;
+package cs757.project.clustering.initialattempt;
 
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;

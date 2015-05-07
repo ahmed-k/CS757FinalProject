@@ -1,19 +1,10 @@
-package cs757.project.preprocessor;
+package cs757.project.postprocessor;
 
-import java.io.BufferedWriter;
+import cs757.project.preprocessor.RemoveRareMovies;
+
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-
-import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+import java.util.*;
 
 public class AnalyzeCluster {
 	
@@ -35,7 +26,7 @@ public class AnalyzeCluster {
 		}
 		scanner.close();
     	
-    	file = new File(classLoader.getResource("1M/clusters.txt").getFile());
+    	file = new File(classLoader.getResource("1M/step2_output.txt").getFile());
 		List<List<UserAttr>> clusters = new ArrayList<List<UserAttr>>();
 		List<UserAttr> everyone = new ArrayList<UserAttr>();
 		clusters.add(everyone);

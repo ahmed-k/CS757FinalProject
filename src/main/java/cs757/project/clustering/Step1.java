@@ -12,12 +12,6 @@ import java.util.*;
 import java.util.Map.Entry;
 
 
-
-/**
- * @author aaronlee
- *
- *
- */
 public class Step1 {
 	
 	public static class Step1Mapper extends Mapper<Object, Text , Text, Text> {
@@ -125,7 +119,7 @@ public class Step1 {
 			
 			List<String> removals = new ArrayList<String>();
 			for ( Entry<String,Double> e : counts.entrySet() )
-				if ( e.getValue() == 2.0 )
+				if ( e.getValue() <= 2.0 )
 					removals.add(e.getKey());
 			for ( String key : removals ){
 				counts.remove(key);

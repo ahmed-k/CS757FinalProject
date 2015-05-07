@@ -1,13 +1,15 @@
 package cs757.project.driver;
 
-import java.io.IOException;
-import java.net.URI;
-
+import cs757.project.clustering.Step1;
+import cs757.project.clustering.Step2;
+import cs757.project.clustering.initialattempt.Step1UserToVector;
+import cs757.project.clustering.initialattempt.Step1WithReducer;
+import cs757.project.customkeys.Canopy;
+import cs757.project.preprocessor.Munger;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hdfs.DistributedFileSystem;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -17,12 +19,8 @@ import org.apache.hadoop.mapreduce.lib.input.NLineInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import cs757.project.clustering.Step1;
-import cs757.project.clustering.Step1UserToVector;
-import cs757.project.clustering.Step1WithReducer;
-import cs757.project.clustering.Step2;
-import cs757.project.customkeys.Canopy;
-import cs757.project.preprocessor.Munger;
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * Created by alabdullahwi on 5/2/2015.
