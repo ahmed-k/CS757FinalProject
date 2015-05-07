@@ -72,6 +72,7 @@ public class JobFactory {
 	private static Job createStep1Job(String[] args) throws IOException {
         Configuration conf = new Configuration();
         conf.setInt("mapreduce.input.lineinputformat.linespermap", 1500);
+        conf.set("mapred.child.java.opts", "-Xmx512m");
         
         Job job = new Job(conf, "Step 1");
         job.setNumReduceTasks(1);

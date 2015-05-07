@@ -57,15 +57,18 @@ public class Step2 {
             
             System.out.println("total centroids="+centroids.size());
         }
+		static double minSimilarity = 0.1;
 		
 	    @Override
         public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
         	Map<String,Integer> userRatings = User.convertToMap(value.toString());
         	
         	List<Centroid> candidates = new ArrayList<Centroid>();
-        	for ( Centroid c : centroids )
-//        		if ( Distance.jaccardCentroid(c, userRatings) > minSimilarity )
+        	for ( Centroid c : centroids ){
+        		double similarity = Distance.jaccardCentroid(c, userRatings);
+        		if ( similarity > minSimilarity )
         			candidates.add(c);
+        	}
         	
         	System.out.println("candidates size="+candidates.size());
         	Double min = 99999.9;

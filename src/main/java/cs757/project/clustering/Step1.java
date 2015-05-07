@@ -110,7 +110,7 @@ public class Step1 {
 			
 			Map<String,Double> centroid = new HashMap<String,Double>();
 			Map<String,Double> counts = new HashMap<String,Double>();
-			int numberOfMovies = 0;
+			///int numberOfMovies = 0;
 			
 			for ( Map<String,Integer> userVector : canopy ){
 				for ( Entry<String,Integer> movieRating : userVector.entrySet() ){
@@ -118,13 +118,13 @@ public class Step1 {
 					centroid.put(movieRating.getKey(), prev == null ? movieRating.getValue() : prev+movieRating.getValue());
 					prev = counts.get(movieRating.getKey());
 					counts.put(movieRating.getKey(), prev == null ? 1 : prev+1 );
-					numberOfMovies++;
+					//numberOfMovies++;
 				}
 			}
 			
 			List<String> removals = new ArrayList<String>();
 			for ( Entry<String,Double> e : counts.entrySet() )
-				if ( e.getValue() == 1.0 )
+				if ( e.getValue() <= 2.0 )
 					removals.add(e.getKey());
 			for ( String key : removals ){
 				counts.remove(key);

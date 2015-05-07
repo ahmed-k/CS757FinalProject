@@ -38,27 +38,6 @@ public class Distance {
 		return intersection/(double)union;
 	}
 	
-	public static double jaccardBagCentroid(Map<String,Integer> map1, Map<String,Double> map2){
-		
-		int intersection = 0;
-		int union = 0;
-		
-		Set<String> keys = new HashSet<String>(map1.keySet());
-		keys.addAll(map2.keySet());
-		
-		for (String key : keys ){
-			Integer v1 = map1.get(key);
-			Double v2 = map2.get(key);
-			if ( v1 != null && v2 != null )
-				intersection += Math.min(v1, v2);
-			if ( v1 != null )
-				union += v1;
-			if ( v2 != null )
-				union += v2;
-		}
-		return intersection/(double)union;
-	}
-	
 	private static Double weight;
 	private static double diffSqr;
 	
@@ -124,6 +103,28 @@ public class Distance {
 				ySqrSum += Math.pow(y-yMean, 2);
 		}
 		return sumXY/(Math.sqrt(xSqrSum)*Math.sqrt(ySqrSum));
+	}
+
+	public static double jaccardCentroid(Centroid c, Map<String, Integer> userRatings) {
+		
+		Double intersection = 0.0;
+		Double union = 0.0;
+		
+		Set<String> keys = new HashSet<String>(c.centroid.keySet());
+		keys.addAll(userRatings.keySet());
+		
+		for (String key : keys ){
+			Double v1 = c.centroid.get(key);
+			Integer v2 = userRatings.get(key);
+			if ( v1 != null && v2 != null )
+				intersection += Math.min(v1, v2);
+			if ( v2 != null ){
+				union += v2;
+				if ( v1 != null )
+					union += v1;
+			}
+		}
+		return intersection/(double)union;		
 	}
 		
 	
