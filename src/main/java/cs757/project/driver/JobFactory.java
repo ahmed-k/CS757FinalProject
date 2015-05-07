@@ -139,6 +139,8 @@ public class JobFactory {
     private static Job createStep2Job(String [] args) throws Exception {
         Configuration conf = new Configuration();
         DistributedCache.addFileToClassPath(new Path(args[3]), conf);
+        conf.set("mapreduce.input.fileinputformat.split.maxsize", "256000");
+        
         Job job = new Job(conf, "Step 2 Job");
         job.setJarByClass(ProjectDriver.class);
         job.setInputFormatClass(KeyValueTextInputFormat.class);

@@ -56,33 +56,36 @@ public class Step2 {
             
             System.out.println("total centroids="+centroids.size());
         }
-		static double minSimilarity = 0.25;
+		static double minSimilarity = 0.3;
 		
 	    @Override
         public void map(Text key, Text value, Context context) throws IOException, InterruptedException {
+	    	
         	Map<String,Integer> userRatings = User.convertToMap(value.toString());
-        	
-        	List<Centroid> candidates = new ArrayList<Centroid>();
         	Double maxSimilarity = -1.0 ;
         	Centroid cluster = null;
-        	for ( Centroid c : centroids ){
-        		Double similarity = Distance.jaccardCentroid(c, userRatings);
-        		if ( similarity > minSimilarity )
-        			candidates.add(c);
-//        	System.out.println("similarity="+similarity);
-        	}
         	
-        	System.out.println("candidates size="+candidates.size());
-        	
+//        	List<Centroid> candidates = new ArrayList<Centroid>();
 //        	for ( Centroid c : centroids ){
-        	for ( Centroid c : candidates ){
+//        		Double similarity = Distance.jaccardCentroid(c, userRatings);
+//        		if ( similarity > minSimilarity )
+//        			candidates.add(c);
+//        		System.out.println("jaccard="+similarity);
+//        	}
+//        	System.out.println("candidates size="+candidates.size());
+        	
+        	
+//        	for ( Centroid c : candidates ){
+        	for ( Centroid c : centroids ){
         		Double similarity = Distance.cosineCentroid(c.centroid, userRatings);
-        		System.out.println("similarity="+similarity);
+//        		System.out.println("cosine="+similarity);
         		if ( similarity > maxSimilarity ){
         			maxSimilarity = similarity;
         			cluster = c;
         		}
         	}
+        	
+//        	System.out.println("");
         	
         	if ( cluster != null ){
         		keyOut.set(Centroid.mapToString(cluster.centroid));
