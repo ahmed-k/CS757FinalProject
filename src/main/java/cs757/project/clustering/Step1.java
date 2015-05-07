@@ -236,10 +236,10 @@ public class Step1 {
 				
 			}
 			
-			valueOut.set("");
+			keyOut.set("");
 			for ( Centroid c : centroids ){
-				keyOut.set(Centroid.mapToString(c.centroid));
-//				keyOut.set(Centroid.mapToString(c.centroid)+"::"+Centroid.mapToString(c.weights));
+				valueOut.set(Centroid.mapToString(c.centroid));
+//				valueOut.set(Centroid.mapToString(c.centroid)+"::"+Centroid.mapToString(c.weights));
 				context.write(keyOut, valueOut);
 			}
 			

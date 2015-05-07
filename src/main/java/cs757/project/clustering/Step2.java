@@ -65,25 +65,25 @@ public class Step2 {
         	Double maxSimilarity = -1.0 ;
         	Centroid cluster = null;
         	
-        	List<Centroid> candidates = new ArrayList<Centroid>();
-        	for ( Centroid c : centroids ){
-        		Double similarity = Distance.jaccardCentroid(c, userRatings);
-        		if ( similarity > minSimilarity )
-        			candidates.add(c);
-        		System.out.println("jaccard="+similarity);
-        	}
-        	System.out.println("candidates size="+candidates.size());
-        	for ( Centroid c : candidates ){
+//        	List<Centroid> candidates = new ArrayList<Centroid>();
 //        	for ( Centroid c : centroids ){
+//        		Double similarity = Distance.jaccardCentroid(c, userRatings);
+//        		if ( similarity > minSimilarity )
+//        			candidates.add(c);
+//        		System.out.println("jaccard="+similarity);
+//        	}
+//        	System.out.println("candidates size="+candidates.size());
+//        	for ( Centroid c : candidates ){
+        	for ( Centroid c : centroids ){
         		Double similarity = Distance.cosineCentroid(c.centroid, userRatings);
-        		System.out.println("cosine="+similarity);
+//        		System.out.println("cosine="+similarity);
         		if ( similarity > maxSimilarity ){
         			maxSimilarity = similarity;
         			cluster = c;
         		}
         	}
         	
-        	System.out.println("");
+//        	System.out.println("");
         	
         	if ( cluster != null ){
         		keyOut.set(Centroid.mapToString(cluster.centroid));

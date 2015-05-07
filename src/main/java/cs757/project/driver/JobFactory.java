@@ -1,16 +1,13 @@
 package cs757.project.driver;
 
-import cs757.project.clustering.Step1;
-import cs757.project.clustering.Step1UserToVector;
-import cs757.project.clustering.Step1WithReducer;
-import cs757.project.clustering.Step2;
-import cs757.project.customkeys.Canopy;
-import cs757.project.preprocessor.Munger;
+import java.io.IOException;
+import java.net.URI;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hdfs.DistributedFileSystem;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
@@ -20,8 +17,12 @@ import org.apache.hadoop.mapreduce.lib.input.NLineInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.io.IOException;
-import java.net.URI;
+import cs757.project.clustering.Step1;
+import cs757.project.clustering.Step1UserToVector;
+import cs757.project.clustering.Step1WithReducer;
+import cs757.project.clustering.Step2;
+import cs757.project.customkeys.Canopy;
+import cs757.project.preprocessor.Munger;
 
 /**
  * Created by alabdullahwi on 5/2/2015.
@@ -138,6 +139,10 @@ public class JobFactory {
     
     private static Job createStep2Job(String [] args) throws Exception {
         Configuration conf = new Configuration();
+        
+        FileSystem hdfs = FileSystem.get(conf);
+	    hdfs.setVerifyChecksum(false);
+        
         DistributedCache.addFileToClassPath(new Path(args[3]), conf);
         conf.set("mapreduce.input.fileinputformat.split.maxsize", "256000");
         
