@@ -118,11 +118,10 @@ public class Distance {
 			Integer v2 = userRatings.get(key);
 			if ( v1 != null && v2 != null )
 				intersection += Math.min(v1, v2);
-			if ( v2 != null ){
+			if ( v2 != null )
 				union += v2;
-				if ( v1 != null )
-					union += v1;
-			}
+			if ( v1 != null )
+				union += v1;
 		}
 		return intersection/(double)union;		
 	}

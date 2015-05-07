@@ -184,7 +184,7 @@ public class Step1 {
 			
 			Map<Centroid, Map<Centroid, Double>> alreadyCompared = new HashMap<Centroid, Map<Centroid, Double>>(); 
 			
-			while ( centroids.size() > 12 ){
+			while ( centroids.size() > avgCanopiesFound ){
 				
 				double max = -1.0;
 				Centroid candidate1 = null, candidate2 = null;
